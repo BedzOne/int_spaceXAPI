@@ -17,7 +17,7 @@ class App extends Component {
     axios.get('https://api.spacexdata.com/v2/launches/all')
       .then(res => {
         let launches = res.data.slice(1).slice(-10);
-        this.setState({launches: launches}, () => console.log(this.state))
+        this.setState({launches: launches});
       })
       .catch(err => console.log(err))
   }

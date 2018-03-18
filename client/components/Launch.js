@@ -23,7 +23,7 @@ class Launch extends Component {
   fetchDetails(){
     axios.get(`https://api.spacexdata.com/v2/rockets/${this.props.launch.rocket.rocket_id}`)
       .then(res => {
-        this.setState({rocket: res.data, showDetails: true}, () => console.log(this.state))
+        this.setState({rocket: res.data, showDetails: true});
       })
       .catch(err => console.log(err))
   }
