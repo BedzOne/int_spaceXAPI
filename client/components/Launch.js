@@ -12,10 +12,15 @@ class Launch extends Component {
       showDetails: false
     }
 
-    this.fetch = this.fetch.bind(this);
+    this.fetchDetails = this.fetchDetails.bind(this);
+    this.hideDetails = this.hideDetails.bind(this);
   }
 
-  fetch(){
+  hideDetails() {
+    this.setState({showDetails: false})
+  }
+
+  fetchDetails(){
     axios.get(`https://api.spacexdata.com/v2/rockets/${this.props.launch.rocket.rocket_id}`)
       .then(res => {
         this.setState({rocket: res.data, showDetails: true}, () => console.log(this.state))
@@ -26,7 +31,8 @@ class Launch extends Component {
   render() {
     let currentDate = Math.floor(Date.now() / 1000);
     let flightDate = this.props.launch.launch_date_utc.replace('Z', '').replace('T', ' ');
-    let success = () => {
+
+    let launchSuccess = () => {
       if (this.props.launch.launch_success) {
         return 'Success'
       } else if (this.props.launch.launch_success === null) {
@@ -40,8 +46,11 @@ class Launch extends Component {
         <span>{flightDate}</span>
         <span>{this.props.launch.rocket.rocket_name}</span>
         <span>{this.props.launch.launch_date_unix < currentDate ? 'Past' : 'Upcoming'}</span>
-        <span>{success()}</span>
-        <span><button onClick={this.fetch}>Show Details</button></span>
+        <span>{launchSuccess()}</span>
+        <span>
+          {!this.state.showDetails ? <button onClick={this.fetchDetails}>Show Details</button> : null }
+          {this.state.showDetails ? <button onClick={this.hideDetails}>Hide Details</button> : null }
+        </span>        
         {this.state.showDetails ? 
           <LaunchDetails launch={this.props.launch} rocket={this.state.rocket}/>
         : null }
